@@ -82,9 +82,7 @@ export default function Portfolio() {
           </div>
         </Card>
       </div>
-      {/* <div class={tw`flex justify-start flex-row flex-wrap mb-20`}> */}
       <div class={tw`flex flex-row justify-center mb-10`}>
-        {/* <div>aaaaa</div> */}
         {links.map((item) => {
           return (
             <div class={tw`mx-2`}>
@@ -92,10 +90,6 @@ export default function Portfolio() {
             </div>
           );
         })}
-
-        {/* <ExternalLink url={links[0].url} title={links[0].name} />
-        <ExternalLink url={links[1].url} title={links[1].name} />
-        <ExternalLink url={links[2].url} title={links[2].name} /> */}
       </div>
     </div>
   );
