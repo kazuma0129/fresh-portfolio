@@ -4,6 +4,7 @@ import { tw } from '@twind';
 import { Card } from '../components/Card.tsx';
 import { ExternalLink } from '../components/ExternalLink.tsx';
 import { writings, qualifications, careers, features, links } from '../constants/about.ts';
+import LastUpdated from '../islands/LastUpdated.tsx';
 
 export default function Portfolio() {
   return (
@@ -90,6 +91,9 @@ export default function Portfolio() {
             </div>
           );
         })}
+      </div>
+      <div class={tw`flex flex-row justify-center mb-5`}>
+        <LastUpdated />
       </div>
     </div>
   );
