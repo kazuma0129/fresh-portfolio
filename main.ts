@@ -12,7 +12,7 @@ import { virtualSheet } from 'twind/sheets';
 
 const sheet = virtualSheet();
 sheet.reset();
-setup({ ...config, sheet });
+setup({ ...config, sheet, darkMode: 'class' });
 
 function render(ctx: RenderContext, render: InnerRenderFunction) {
   const snapshot = ctx.state.get('twind') as unknown[] | null;
