@@ -24,8 +24,8 @@ export const FlexRow = ({ children }: FlexRowProps) => {
 export const FlexLinkAndDateRow = ({ date, url, title }: FlexLinkAndDateRowProps) => {
   return (
     <FlexRow>
-      <div class={tw`mr-3`}>{date}</div>
-      <ExternalLink url={url} title={title} />
+      <div class={tw`mr-3 w-1/3`}>{date}</div>
+      <ExternalLink url={url} title={title} class={tw`w-2/3`} />
     </FlexRow>
   );
 };
