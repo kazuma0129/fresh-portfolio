@@ -2,6 +2,7 @@
   "imports": {
     "$fresh/": "https://raw.githubusercontent.com/lucacasonato/fresh/main/",
     "@twind": "./utils/twind.ts",
+    "assert": "https://deno.land/std@0.65.0/testing/asserts.ts",
     "frontmatter": "https://deno.land/x/frontmatter@v0.1.4/mod.ts",
     "gfm": "https://deno.land/x/gfm@0.1.19/mod.ts",
     "preact": "https://esm.sh/preact@10.8.1",
