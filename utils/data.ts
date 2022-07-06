@@ -19,8 +19,8 @@ const genPostObj = <T>(path: T, title: string): POST_DATA => ({
   title,
 });
 
-export const POST_MAP = new Map<string, POST_DATA>
+export const POST_MAP = new Map<string, POST_DATA>();
 
 for (const kv of Object.entries(pageMap.posts)) {
-  POST_MAP.set(kv[0], genPostObj(...kv))
+  POST_MAP.set(kv[0], genPostObj(...kv));
 }
