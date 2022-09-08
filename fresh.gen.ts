@@ -2,25 +2,29 @@
 // This file SHOULD be checked into source version control.
 // This file is automatically updated during development when running `dev.ts`.
 
-import * as $0 from "./routes/gfm.css.ts";
-import * as $1 from "./routes/index.tsx";
-import * as $2 from "./routes/posts/[...title].tsx";
-import * as $3 from "./routes/posts/index.tsx";
+import config from "./deno.json" assert { type: "json" };
+import * as $0 from "./routes/_app.tsx";
+import * as $1 from "./routes/gfm.css.ts";
+import * as $2 from "./routes/index.tsx";
+import * as $3 from "./routes/posts/[...title].tsx";
+import * as $4 from "./routes/posts/index.tsx";
 import * as $$0 from "./islands/LastUpdated.tsx";
 import * as $$1 from "./islands/ThemeButton.tsx";
 
 const manifest = {
   routes: {
-    "./routes/gfm.css.ts": $0,
-    "./routes/index.tsx": $1,
-    "./routes/posts/[...title].tsx": $2,
-    "./routes/posts/index.tsx": $3,
+    "./routes/_app.tsx": $0,
+    "./routes/gfm.css.ts": $1,
+    "./routes/index.tsx": $2,
+    "./routes/posts/[...title].tsx": $3,
+    "./routes/posts/index.tsx": $4,
   },
   islands: {
     "./islands/LastUpdated.tsx": $$0,
     "./islands/ThemeButton.tsx": $$1,
   },
   baseUrl: import.meta.url,
+  config,
 };
 
 export default manifest;

@@ -21,10 +21,8 @@ export const useDarkTheme: UseSimpleDarkMode = (isInitialDark = false) => {
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
-      document.querySelector('body')?.classList.add('dark:bg-black');
     } else {
       document.documentElement.classList.remove('dark');
-      document.querySelector('body')?.classList.remove('dark:bg-black');
     }
   }, [isDarkMode]);
 
