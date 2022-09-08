@@ -1,6 +1,7 @@
 {
   "posts": {
     "init": "init",
-    "long_title": "long title"
+    "long_title": "long title",
+    "fresh": "fresh でサイトを作り直した"
   }
 }
