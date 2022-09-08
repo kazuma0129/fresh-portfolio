@@ -34,6 +34,11 @@ export const features = [
     title: 'FunLocks',
     url: `https://funlocks.github.io/`,
   },
+  {
+    date: 'Aug 2022',
+    title: 'UIT INSIDE ep.129',
+    url: `https://uit-inside.linecorp.com/episode/129`,
+  },
 ] as const;
 
 export const careers = [
