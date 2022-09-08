@@ -1,6 +1,6 @@
 {
   "imports": {
-    "$fresh/": "https://raw.githubusercontent.com/lucacasonato/fresh/main/",
+    "$fresh/": "https://deno.land/x/fresh@1.1.0/",
     "@twind": "./utils/twind.ts",
     "assert": "https://deno.land/std@0.65.0/testing/asserts.ts",
     "frontmatter": "https://deno.land/x/frontmatter@v0.1.4/mod.ts",
