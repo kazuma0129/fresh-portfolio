@@ -2,6 +2,9 @@ import { Handlers } from '$fresh/server.ts';
 import { gfm } from '../utils/markdown.ts';
 
 const CSS = `${gfm.CSS}
+* {
+  font-size: 14px;
+}
 
 ol.nested {
 	counter-reset: item;

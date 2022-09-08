@@ -47,9 +47,9 @@ export const handler: Handlers<PageData> = {
 };
 
 export default (props: PageProps<PageData>) => {
-  const main = tw`py-8 xl:px-32 lg:px-32 md:px-32 sm:px-16 xs:px-16 px-8`;
+  const main = tw`py-16 xl:px-32 lg:px-32 md:px-32 sm:px-16 xs:px-16 px-8`;
   const title = tw`text(4xl gray-900) tracking-tight font-extrabold mt-6`;
-  const article = tw`mt-6`;
+  const article = tw`my-6`;
   return (
     <>
       <Head>
