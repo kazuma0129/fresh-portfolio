@@ -90,6 +90,16 @@ export const qualifications = [
     name: 'Applied Information Technology Engineer Examination',
     url: 'https://www.jitec.ipa.go.jp/1_11seido/ap.html',
   },
+  {
+    date: 'Jul 2022',
+    name: 'Information Security Management Examination',
+    url: 'https://www.jitec.ipa.go.jp/1_11seido/sg.html',
+  },
+  {
+    date: 'Dec 2022',
+    name: 'Registered Information Security Specialist Examination',
+    url: 'https://www.jitec.ipa.go.jp/1_11seido/sc.html',
+  },
 ] as const;
 
 export const writings = [
