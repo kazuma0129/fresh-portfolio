@@ -17,7 +17,7 @@ export default function Portfolio() {
         <h2 class={tw`text-lg`}>Software Engineer, Tokyo, Japan</h2>
       </div>
       <div class={tw`flex flex-row flex-wrap mb-20`}>
-        <Card title={'Background'}>
+        <Card title='Background'>
           <div class={tw`${cardBodyStyle}`}>
             <p>I was born and raised in Aomori Prefecture, Japan.</p>
             <p>
@@ -28,10 +28,10 @@ export default function Portfolio() {
             <p>I'm currently working as a software Engineer in Tokyo, Japan.</p>
           </div>
         </Card>
-        <Card title={'Interests'}>
+        <Card title='Interests'>
           <div class={tw`${cardBodyStyle}`}>Motorcycle, Netflix, Comedy, Ramen, ONSEN</div>
         </Card>
-        <Card title={'Writings'}>
+        <Card title='Writings'>
           <div class={tw`${cardBodyStyle}`}>
             {writings.map((item) => {
               return (
@@ -42,21 +42,21 @@ export default function Portfolio() {
             })}
           </div>
         </Card>
-        <Card title={'Qualification'}>
+        <Card title='Qualifications'>
           <div class={tw`${cardBodyStyle}`}>
             {qualifications.map((item) => {
               return <FlexLinkAndDateRow date={item.date} url={item.url} title={item.name} />;
             })}
           </div>
         </Card>
-        <Card title={'Carrers'}>
+        <Card title='Carrers'>
           <div class={tw`${cardBodyStyle}`}>
             {careers.map((item) => {
               return <FlexLinkAndDateRow date={item.date} url={item.url} title={item.corpName} />;
             })}
           </div>
         </Card>
-        <Card title={'Features'}>
+        <Card title='Features'>
           <div class={tw`${cardBodyStyle}`}>
             {features.map((item) => {
               return <FlexLinkAndDateRow date={item.date} url={item.url} title={item.title} />;
