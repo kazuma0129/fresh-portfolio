@@ -22,22 +22,22 @@ export const features = [
   {
     date: 'Oct 2019',
     title: 'JAWS-SG 函館 第1回イベント 初心者向けAlexaハンズオン！',
-    url: `https://jaws-sg.connpass.com/event/146666/`,
+    url: 'https://jaws-sg.connpass.com/event/146666/',
   },
   {
     date: 'Dec 2020',
     title: '未来大×サイバーエージェント社員(未来大OB/OG) 夏のLT大会',
-    url: `https://connpass.com/event/182984/`,
+    url: 'https://connpass.com/event/182984/',
   },
   {
     date: 'Dec 2020',
     title: 'FunLocks',
-    url: `https://funlocks.github.io/`,
+    url: 'https://funlocks.github.io/',
   },
   {
     date: 'Aug 2022',
     title: 'UIT INSIDE ep.129',
-    url: `https://uit-inside.linecorp.com/episode/129`,
+    url: 'https://uit-inside.linecorp.com/episode/129',
   },
 ] as const;
 
@@ -78,17 +78,17 @@ export const qualifications = [
   {
     date: 'Nov 2013',
     name: 'Information Technology Passport Examination',
-    url: `https://www.jitec.ipa.go.jp/1_11seido/ip.html`,
+    url: 'https://www.jitec.ipa.go.jp/1_11seido/ip.html',
   },
   {
     date: 'Nov 2017',
     name: 'Fundamental Information Technology Engineer Examination',
-    url: `https://www.jitec.ipa.go.jp/1_11seido/fe.html`,
+    url: 'https://www.jitec.ipa.go.jp/1_11seido/fe.html',
   },
   {
     date: 'Dec 2018',
     name: 'Applied Information Technology Engineer Examination',
-    url: `https://www.jitec.ipa.go.jp/1_11seido/ap.html`,
+    url: 'https://www.jitec.ipa.go.jp/1_11seido/ap.html',
   },
 ] as const;
 
@@ -110,18 +110,18 @@ export const writings = [
 export const links = [
   {
     name: 'GitHub',
-    url: `https://github.com/kazuma0129`,
+    url: 'https://github.com/kazuma0129',
   },
   {
     name: 'Twitter',
-    url: `https://twitter.com/kazuma_0129`,
+    url: 'https://twitter.com/kazuma_0129',
   },
   {
     name: 'Facebook',
-    url: `https://www.facebook.com/profile.php?id=100005368476501`,
+    url: 'https://www.facebook.com/profile.php?id=100005368476501',
   },
   {
-    name: `LinkedIn`,
-    url: `https://www.linkedin.com/in/kazuma-ohashi-29606b175`,
+    name: 'LinkedIn',
+    url: 'https://www.linkedin.com/in/kazuma-ohashi-29606b175',
   },
 ] as const;

@@ -10,7 +10,7 @@ interface ExternalLinkProps {
 
 export const ExternalLink = ({ url, title, class: c }: ExternalLinkProps) => {
   return (
-    <a href={url} target='_blank' class={c}>
+    <a href={url} target='_blank' class={c} rel="noreferrer">
       {title}
     </a>
   );
