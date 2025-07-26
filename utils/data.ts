@@ -1,8 +1,8 @@
-import pageMap from '../data/page_map.json' assert { type: 'json' };
+import pageMap from "../data/page_map.json" with { type: "json" };
 
-export type POST_PATHS = keyof typeof pageMap['posts'];
+export type POST_PATHS = keyof typeof pageMap["posts"];
 
-export const DATA_BASE_PATH = 'data';
+export const DATA_BASE_PATH = "data";
 
 export type POST_DATA = {
   path: string;

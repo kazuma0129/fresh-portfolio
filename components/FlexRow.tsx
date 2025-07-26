@@ -1,7 +1,5 @@
-/** @jsx h */
-import { h, VNode } from 'preact';
-import { tw } from '@twind';
-import { ExternalLink } from './ExternalLink.tsx';
+import { VNode } from "preact";
+import { ExternalLink } from "./ExternalLink.tsx";
 
 interface FlexRowProps {
   children: VNode | VNode[];
@@ -15,17 +13,19 @@ interface FlexLinkAndDateRowProps {
 
 export const FlexRow = ({ children }: FlexRowProps) => {
   return (
-    <div class={tw`align-start`}>
-      <div class={tw`flex flex-row`}>{children}</div>
+    <div>
+      <div>{children}</div>
     </div>
   );
 };
 
-export const FlexLinkAndDateRow = ({ date, url, title }: FlexLinkAndDateRowProps) => {
+export const FlexLinkAndDateRow = (
+  { date, url, title }: FlexLinkAndDateRowProps,
+) => {
   return (
     <FlexRow>
-      <div class={tw`mr-3 w-1/3`}>{date}</div>
-      <ExternalLink url={url} title={title} class={tw`w-2/3`} />
+      <div>{date}</div>
+      <ExternalLink url={url} title={title} />
     </FlexRow>
   );
 };

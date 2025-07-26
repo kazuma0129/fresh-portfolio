@@ -1,18 +1,13 @@
-/** @jsx h */
-import { h } from 'preact';
-import { tw } from '@twind';
-import { Head } from '$fresh/runtime.ts';
-import { AppProps } from '$fresh/src/server/types.ts';
+import { Head } from "$fresh/runtime.ts";
+import { type PageProps } from "$fresh/server.ts";
 
-export default function App({ Component }: AppProps) {
+export default function App({ Component }: PageProps) {
   return (
-    <html data-custom='data'>
+    <html data-custom="data">
       <Head>
         <title>@kazuma0129</title>
       </Head>
-      <body
-        class={tw`antialiased dark:bg-black dark:text-white font-bold transition-colors duration-700`}
-      >
+      <body>
         <Component />
       </body>
     </html>

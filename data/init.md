@@ -21,6 +21,4 @@ console.log(a); // 0
 - foo
 - bar
 
-|     |     |
-| --- | --- | --- |
-| hey | goo | jjj |
+| | | | --- | --- | --- | | hey | goo | jjj |

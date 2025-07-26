@@ -1,6 +1,4 @@
-/** @jsx h */
-import { h as _h } from 'preact';
-import { useState, useCallback, useEffect } from 'preact/hooks';
+import { useCallback, useEffect, useState } from "preact/hooks";
 
 type UseSimpleDarkMode = (isDark?: boolean) => {
   isDarkMode: boolean;
@@ -10,7 +8,7 @@ type UseSimpleDarkMode = (isDark?: boolean) => {
 export const useDarkTheme: UseSimpleDarkMode = (isInitialDark = false) => {
   const [isDarkMode, toggleTheme] = useState<boolean>(isInitialDark);
   const toggle = useCallback((isDark?: boolean) => {
-    if (typeof isDark === 'undefined') {
+    if (typeof isDark === "undefined") {
       toggleTheme((state) => !state);
       return;
     }
@@ -20,9 +18,9 @@ export const useDarkTheme: UseSimpleDarkMode = (isInitialDark = false) => {
 
   useEffect(() => {
     if (isDarkMode) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.classList.add("dark");
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.remove("dark");
     }
   }, [isDarkMode]);
 
