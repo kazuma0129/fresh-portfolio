@@ -1,0 +1,9 @@
+/* Tailwind CSS Configuration */
+:root {
+  /* Tailwind Configuration Script */
+}
+
+/* This file is loaded after the Tailwind CDN to configure it */
+script[type="module"] {
+  display: none;
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Kazuma Ohashi - Software Engineer Portfolio",
+  "short_name": "Kazuma Ohashi",
+  "description": "Software Engineer with 4+ years of experience in frontend and backend development",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#222222",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["portfolio", "resume", "cv"],
+  "lang": "en",
+  "orientation": "portrait-primary"
+}

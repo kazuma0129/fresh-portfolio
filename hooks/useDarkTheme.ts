@@ -6,7 +6,14 @@ type UseSimpleDarkMode = (isDark?: boolean) => {
 };
 
 export const useDarkTheme: UseSimpleDarkMode = (isInitialDark = false) => {
-  const [isDarkMode, toggleTheme] = useState<boolean>(isInitialDark);
+  const [isDarkMode, toggleTheme] = useState<boolean>(() => {
+    // Check system preference on client side
+    if (typeof globalThis !== "undefined" && globalThis.window) {
+      return globalThis.window.matchMedia?.("(prefers-color-scheme: dark)").matches ?? isInitialDark;
+    }
+    return isInitialDark;
+  });
+
   const toggle = useCallback((isDark?: boolean) => {
     if (typeof isDark === "undefined") {
       toggleTheme((state) => !state);

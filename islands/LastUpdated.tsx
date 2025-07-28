@@ -24,10 +24,20 @@ export default () => {
       });
     })();
   }, []);
+
+  const formatDate = (dateString: string) => {
+    if (!dateString) return "";
+    return new Date(dateString).toLocaleDateString();
+  };
+
   return (
-    <div>
+    <div className="text-center text-sm text-muted-foreground">
       Last Updated:{" "}
-      <ExternalLink url={latestCommit.htmlUrl} title={latestCommit.date} />
+      <ExternalLink 
+        url={latestCommit.htmlUrl} 
+        title={formatDate(latestCommit.date)}
+        className="text-muted-foreground hover:text-foreground"
+      />
     </div>
   );
 };

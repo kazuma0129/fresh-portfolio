@@ -7,6 +7,8 @@ import * as $gfm_css from "./routes/gfm.css.ts";
 import * as $index from "./routes/index.tsx";
 import * as $posts_title_ from "./routes/posts/[...title].tsx";
 import * as $posts_index from "./routes/posts/index.tsx";
+import * as $robots_txt from "./routes/robots.txt.ts";
+import * as $sitemap_xml from "./routes/sitemap.xml.ts";
 import * as $LastUpdated from "./islands/LastUpdated.tsx";
 import * as $ThemeButton from "./islands/ThemeButton.tsx";
 import type { Manifest } from "$fresh/server.ts";
@@ -18,6 +20,8 @@ const manifest = {
     "./routes/index.tsx": $index,
     "./routes/posts/[...title].tsx": $posts_title_,
     "./routes/posts/index.tsx": $posts_index,
+    "./routes/robots.txt.ts": $robots_txt,
+    "./routes/sitemap.xml.ts": $sitemap_xml,
   },
   islands: {
     "./islands/LastUpdated.tsx": $LastUpdated,
