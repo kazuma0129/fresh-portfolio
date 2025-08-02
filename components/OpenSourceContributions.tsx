@@ -1,6 +1,7 @@
 import { ExternalLink } from "./ExternalLink.tsx";
 import { SectionHeading } from "./SectionHeading.tsx";
 import { openSourceContributions } from "../constants/about.ts";
+import { cn } from "../utils/cn.ts";
 
 export function OpenSourceContributions() {
   return (
@@ -20,7 +21,10 @@ export function OpenSourceContributions() {
               <p className="text-sm text-muted-foreground leading-relaxed">
                 {item.description}
               </p>
-              <span className="inline-block text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full">
+              <span className={cn(
+                "inline-block text-xs text-muted-foreground bg-muted px-2 py-1 rounded-full",
+                "transition-colors duration-200 hover:bg-muted/80"
+              )}>
                 {item.type}
               </span>
             </div>

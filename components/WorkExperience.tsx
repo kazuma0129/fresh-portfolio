@@ -53,6 +53,29 @@ export function WorkExperience() {
                 ))}
               </ul>
             )}
+            {item.links && (
+              <div className="mt-3">
+                <h4 className="text-sm font-medium text-foreground mb-2">
+                  Links
+                </h4>
+                <ul className="space-y-1" role="list">
+                  {item.links.map((link, linkIndex) => (
+                    <li key={linkIndex} className="text-xs">
+                      <ExternalLink
+                        url={link.url}
+                        title={link.title}
+                        className="text-primary text-xs"
+                      />
+                      {link.description && (
+                        <span className="text-muted-foreground ml-1">
+                          - {link.description}
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </article>
         ))}
       </div>

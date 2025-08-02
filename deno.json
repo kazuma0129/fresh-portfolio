@@ -14,7 +14,9 @@
     "dompurify": "https://esm.sh/dompurify@3.0.8",
     "preact": "https://esm.sh/preact@10.24.3",
     "preact-render-to-string": "https://esm.sh/preact-render-to-string@6.5.11?deps=preact@10.24.3",
-    "preact/": "https://esm.sh/preact@10.24.3/"
+    "preact/": "https://esm.sh/preact@10.24.3/",
+    "clsx": "https://esm.sh/clsx@2.1.0",
+    "tailwind-merge": "https://esm.sh/tailwind-merge@2.2.1"
   },
   "compilerOptions": {
     "jsx": "react-jsx",

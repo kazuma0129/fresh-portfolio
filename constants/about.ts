@@ -6,6 +6,11 @@ interface Experience {
   description: string;
   url: string;
   highlights?: string[];
+  links?: {
+    title: string;
+    url: string;
+    description?: string;
+  }[];
 }
 
 interface Certification {
@@ -55,19 +60,7 @@ export const openSourceContributions = [
     description: "Added option to specify tags to ignore in vue/no-deprecated-slot-attribute rule",
     url: "https://github.com/vuejs/eslint-plugin-vue/pull/2314",
     type: "Pull Request",
-  },
-  {
-    title: "sendgrid-type-gen",
-    description: "A tool enhancing email template integration for TypeScript projects",
-    url: "https://www.npmjs.com/package/sendgrid-type-gen",
-    type: "NPM Package",
-  },
-  {
-    title: "LIFF CLI",
-    description: "Official CLI tool for LINE Front-end Framework development",
-    url: "https://www.npmjs.com/package/@line/liff-cli",
-    type: "NPM Package",
-  },
+  }
 ] as const;
 
 export const achievements = [
@@ -115,7 +108,7 @@ export const experience: Experience[] = [
     position: "Software Engineer",
     company: "LINE Corporation / LY Corporation",
     location: "Tokyo, Japan",
-    description: "Led frontend development for LIFF SDK. Designed and implemented new APIs, established OSS maintenance policies, and contributed to open-source projects. Worked in bilingual environment with technical documentation in English.",
+    description: "Led frontend development for LIFF SDK. Designed and implemented new APIs, improved security practices, and contributed to open-source projects. Worked in bilingual environment with technical documentation in English.",
     url: "https://www.lycorp.co.jp/en/",
     highlights: [
       "Led frontend development for LIFF SDK",
@@ -123,6 +116,26 @@ export const experience: Experience[] = [
       "Designed LIFF Plugin for auto-filling user information",
       "Migrated LINE Login frontend from Vue.js v2 to v3",
       "Introduced SAST tools and security improvements",
+      "Led the renewal/redesign of a QA application",
+      "Served as an interviewer for mid-career recruitment, conducting initial screening interviews",
+      "Responsible for onboarding and supporting new team members"
+    ],
+    links: [
+      {
+        title: "LIFF CLI (GitHub Repository)",
+        url: "https://github.com/line/liff-cli",
+        description: "Source code repository showing my contributions as the main developer"
+      },
+      {
+        title: "Refining the developer experience with technical expertise: Exploration and refinement by LINE Developers Product front-end engineers",
+        url: "https://note.com/lycorp_recruit/n/na6255a4c30e6",
+        description: "Interview Article About My Team and Our Work",
+      },
+      {
+        title: "Front-end Engineer Mid-career Recruitment Briefing Report LINE Developers Product Development Case Study",
+        url:"https://note.com/lycorp_recruit/n/n2b31ef083172",
+        description: "Introduction of my team at a recruiting information session"
+      }
     ]
   },
   {
@@ -136,6 +149,13 @@ export const experience: Experience[] = [
       "Developed notification system for EV charging completion",
       "Created and deployed sendgrid-type-gen tool for the team",
       "Built APIs and documentation for service features"
+    ],
+    links: [
+      {
+        title: "sendgrid-type-gen (NPM Package)",
+        url: "https://www.npmjs.com/package/sendgrid-type-gen",
+        description: "TypeScript tool I created for enhancing SendGrid email template integration"
+      },
     ]
   },
   {
@@ -150,6 +170,13 @@ export const experience: Experience[] = [
       "Implemented authentication and EC system features",
       "Performed vulnerability remediation and infrastructure maintenance",
       "Collaborated with cross-functional teams on native applications"
+    ],
+    links: [
+      {
+        title: "CyberAgent × FUN Alumni Event Speaker",
+        url: "https://connpass.com/event/182984/",
+        description: 'Presented on how the backend infrastructure of "fensi" is architected as a microservices system'
+      }
     ]
   },
 ];

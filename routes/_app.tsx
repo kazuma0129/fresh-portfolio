@@ -26,7 +26,7 @@ export default function App({ Component }: PageProps) {
         <meta property="twitter:description" content="Software Engineer with 4+ years of experience in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js." />
         <meta property="twitter:image" content="/icon.png" />
         
-        <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/x-icon" href="/favicon.svg" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="preconnect" href="https://cdn.tailwindcss.com" />

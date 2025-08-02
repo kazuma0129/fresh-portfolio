@@ -1,5 +1,6 @@
 import { SectionHeading } from "./SectionHeading.tsx";
 import { skills } from "../constants/about.ts";
+import { cn } from "../utils/cn.ts";
 
 export function TechnicalSkills() {
   return (
@@ -17,7 +18,11 @@ export function TechnicalSkills() {
               {skillGroup.items.map((skill, skillIndex) => (
                 <span
                   key={skillIndex}
-                  className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full"
+                  className={cn(
+                    "px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full",
+                    "transition-colors duration-200 hover:bg-muted/80",
+                    "border border-transparent hover:border-border/50"
+                  )}
                   role="listitem"
                 >
                   {skill}
