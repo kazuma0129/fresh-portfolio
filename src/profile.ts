@@ -1,4 +1,4 @@
-interface Experience {
+export interface Experience {
   date: string;
   position: string;
   company: string;
@@ -13,7 +13,7 @@ interface Experience {
   }[];
 }
 
-interface Certification {
+export interface Certification {
   date: string;
   name: string;
   issuer: string;
@@ -26,7 +26,7 @@ export const personalInfo = {
   email: "kazuma0129.work@gmail.com",
   phone: "+81 90 2988 2901",
   location: "Tokyo, Japan",
-  summary: "Software engineer with strong expertise in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Proven track record in developing and maintaining high-performance applications and tools. Experienced in working with cross-functional teams in both Japanese and English environments. Demonstrated leadership in frontend development for LIFF SDK, with a commitment to contributing to open-source software."
+  summary: "Software engineer with strong expertise in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Proven track record in developing and maintaining high-performance applications and tools. Experienced in working with cross-functional teams in both Japanese and English environments. Demonstrated leadership in frontend development for LIFF SDK, with a commitment to contributing to open-source software.",
 } as const;
 
 export const links = [
@@ -60,7 +60,7 @@ export const openSourceContributions = [
     description: "Added option to specify tags to ignore in vue/no-deprecated-slot-attribute rule",
     url: "https://github.com/vuejs/eslint-plugin-vue/pull/2314",
     type: "Pull Request",
-  }
+  },
 ] as const;
 
 export const achievements = [
@@ -118,13 +118,13 @@ export const experience: Experience[] = [
       "Introduced SAST tools and security improvements",
       "Led the renewal/redesign of a QA application",
       "Served as an interviewer for mid-career recruitment, conducting initial screening interviews",
-      "Responsible for onboarding and supporting new team members"
+      "Responsible for onboarding and supporting new team members",
     ],
     links: [
       {
         title: "LIFF CLI (GitHub Repository)",
         url: "https://github.com/line/liff-cli",
-        description: "Source code repository showing my contributions as the main developer"
+        description: "Source code repository showing my contributions as the main developer",
       },
       {
         title: "Refining the developer experience with technical expertise: Exploration and refinement by LINE Developers Product front-end engineers",
@@ -133,10 +133,10 @@ export const experience: Experience[] = [
       },
       {
         title: "Front-end Engineer Mid-career Recruitment Briefing Report LINE Developers Product Development Case Study",
-        url:"https://note.com/lycorp_recruit/n/n2b31ef083172",
-        description: "Introduction of my team at a recruiting information session"
-      }
-    ]
+        url: "https://note.com/lycorp_recruit/n/n2b31ef083172",
+        description: "Introduction of my team at a recruiting information session",
+      },
+    ],
   },
   {
     date: "Apr 2023 - Jul 2023",
@@ -148,15 +148,15 @@ export const experience: Experience[] = [
     highlights: [
       "Developed notification system for EV charging completion",
       "Created and deployed sendgrid-type-gen tool for the team",
-      "Built APIs and documentation for service features"
+      "Built APIs and documentation for service features",
     ],
     links: [
       {
         title: "sendgrid-type-gen (NPM Package)",
         url: "https://www.npmjs.com/package/sendgrid-type-gen",
-        description: "TypeScript tool I created for enhancing SendGrid email template integration"
+        description: "TypeScript tool I created for enhancing SendGrid email template integration",
       },
-    ]
+    ],
   },
   {
     date: "Apr 2020 - Apr 2022",
@@ -169,15 +169,15 @@ export const experience: Experience[] = [
       "Designed and developed live streaming functionality using AWS Chime",
       "Implemented authentication and EC system features",
       "Performed vulnerability remediation and infrastructure maintenance",
-      "Collaborated with cross-functional teams on native applications"
+      "Collaborated with cross-functional teams on native applications",
     ],
     links: [
       {
         title: "CyberAgent × FUN Alumni Event Speaker",
         url: "https://connpass.com/event/182984/",
-        description: 'Presented on how the backend infrastructure of "fensi" is architected as a microservices system'
-      }
-    ]
+        description: "Presented on how the backend infrastructure of \"fensi\" is architected as a microservices system",
+      },
+    ],
   },
 ];
 

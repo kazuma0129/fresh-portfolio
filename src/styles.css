@@ -1,0 +1,382 @@
+@layer reset, tokens, base, layout, components, utilities;
+
+@layer reset {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  body,
+  h1,
+  h2,
+  h3,
+  h4,
+  p,
+  ul,
+  dl,
+  dd {
+    margin: 0;
+  }
+
+  ul {
+    padding: 0;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+}
+
+@layer tokens {
+  :root {
+    color-scheme: light dark;
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --muted: #475569;
+    --soft: #f1f5f9;
+    --border: #dbe3ef;
+    --link: #172554;
+    --focus: #2563eb;
+    --measure: 42rem;
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-6: 1.5rem;
+    --space-8: 2rem;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --background: #020617;
+      --foreground: #f8fafc;
+      --muted: #cbd5e1;
+      --soft: #1e293b;
+      --border: #334155;
+      --link: #dbeafe;
+      --focus: #93c5fd;
+    }
+  }
+
+  @media (prefers-contrast: more) {
+    :root {
+      --muted: currentColor;
+      --border: currentColor;
+      --focus: currentColor;
+    }
+  }
+}
+
+@layer base {
+  html {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    line-height: 1.6;
+  }
+
+  body {
+    min-height: 100vh;
+    font-size: 0.875rem;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--foreground);
+    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-weight: 650;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 1.75rem + 1vw, 3rem);
+  }
+
+  h2 {
+    margin-block-end: var(--space-3);
+    border-block-end: 1px solid var(--border);
+    padding-block-end: var(--space-2);
+    font-size: 1.125rem;
+  }
+
+  h3 {
+    font-size: 0.875rem;
+  }
+
+  h4 {
+    margin-block-end: var(--space-2);
+    font-size: 0.875rem;
+  }
+
+  p,
+  dd,
+  time,
+  .muted-link {
+    color: var(--muted);
+  }
+
+  a {
+    color: var(--link);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover {
+    text-decoration: none;
+  }
+
+  a:focus-visible {
+    border-radius: 0.125rem;
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+}
+
+@layer layout {
+  .page {
+    container-type: inline-size;
+    margin-inline: auto;
+    max-width: var(--measure);
+    padding: var(--space-4);
+  }
+
+  main {
+    display: grid;
+    gap: var(--space-8);
+  }
+
+  section {
+    break-inside: avoid;
+  }
+
+  footer {
+    margin-block-start: var(--space-8);
+    border-block-start: 1px solid var(--border);
+    padding-block: var(--space-4);
+    text-align: center;
+  }
+
+  .profile-header {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-block-end: var(--space-6);
+  }
+
+  .split {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+}
+
+@layer components {
+  .subtitle {
+    margin-block: var(--space-2) var(--space-3);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    font-size: 1.125rem;
+  }
+
+  address {
+    display: grid;
+    gap: var(--space-2);
+    color: var(--muted);
+    font-style: normal;
+  }
+
+  .contact-row,
+  .social-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .profile-mark {
+    flex: 0 0 6rem;
+    border: 1px solid var(--border);
+    border-radius: 0.75rem;
+    background: #ffffff;
+  }
+
+  .stack-sm,
+  .stack-md,
+  .stack-lg {
+    display: grid;
+  }
+
+  .stack-sm {
+    gap: var(--space-2);
+  }
+
+  .stack-md {
+    gap: var(--space-3);
+  }
+
+  .stack-lg {
+    gap: var(--space-4);
+  }
+
+  article {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  time {
+    flex: 0 0 auto;
+    font-weight: 300;
+    white-space: nowrap;
+  }
+
+  .compact-list {
+    display: grid;
+    gap: var(--space-1);
+    padding-inline-start: var(--space-6);
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .related-links ul {
+    display: grid;
+    gap: var(--space-1);
+    list-style: none;
+  }
+
+  .related-links li {
+    color: var(--muted);
+    font-size: 0.75rem;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
+  }
+
+  .pill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-block-start: var(--space-2);
+    list-style: none;
+  }
+
+  .pill-list li,
+  .tag {
+    border: 1px solid transparent;
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--muted);
+    padding: 0.2rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .language-list {
+    display: grid;
+    gap: var(--space-2);
+  }
+
+  .language-list div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+  }
+
+  .language-list dt {
+    font-weight: 650;
+  }
+}
+
+@layer utilities {
+  .skip-link {
+    position: absolute;
+    inset-block-start: -10rem;
+    inset-inline-start: var(--space-2);
+    z-index: 1;
+    border: 2px solid var(--focus);
+    background: var(--background);
+    color: var(--foreground);
+    padding: var(--space-2);
+  }
+
+  .skip-link:focus {
+    inset-block-start: var(--space-2);
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .small {
+    font-size: 0.75rem;
+  }
+}
+
+@container (max-width: 34rem) {
+  .profile-header,
+  .split,
+  .language-list div {
+    display: grid;
+  }
+
+  .profile-mark {
+    display: none;
+  }
+
+  time {
+    white-space: normal;
+  }
+
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+@media print {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --muted: #000000;
+    --border: #999999;
+    --link: #000000;
+  }
+
+  body {
+    font-size: 11pt;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .skip-link,
+  .profile-mark,
+  .sr-only {
+    display: none !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+}

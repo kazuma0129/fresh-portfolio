@@ -1,12 +1,29 @@
-# fresh-portfolio
+# portfolio
 
-[![Made with Fresh](https://fresh.deno.dev/fresh-badge-dark.svg)](https://fresh.deno.dev)
-### Usage
+Static portfolio generated with Bun tooling.
 
-Start the project:
+## Usage
 
+Install dependencies:
+
+```sh
+bun install
 ```
-deno task start
+
+Build the static site:
+
+```sh
+bun run build
 ```
 
-This will watch the project directory and restart as necessary.
+Run tests and build:
+
+```sh
+bun run check
+```
+
+Preview `dist/` locally:
+
+```sh
+bun run serve
+```
