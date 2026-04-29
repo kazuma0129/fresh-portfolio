@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { escapeHtml, renderDocument } from "./html";
+import { escapeHtml, renderDocument } from "./html.ts";
 
 describe("HTML generation", () => {
   test("escapes generated text", () => {

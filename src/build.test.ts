@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { build, distDir, rootDir } from "./build";
+import { build, distDir, rootDir } from "./build.ts";
 
 describe("build", () => {
   afterEach(async () => {

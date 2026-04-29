@@ -8,7 +8,7 @@ import {
   openSourceContributions,
   personalInfo,
   skills,
-} from "./profile";
+} from "./profile.ts";
 
 const siteUrl = "https://kazuma0129.work/";
 const title = "Kazuma Ohashi - Software Engineer | CV";

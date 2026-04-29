@@ -1,6 +1,6 @@
 import { mkdir, rm, writeFile } from "node:fs/promises";
 import { join } from "node:path";
-import { renderDocument } from "./html";
+import { renderDocument } from "./html.ts";
 
 export const rootDir = new URL("..", import.meta.url).pathname;
 export const distDir = join(rootDir, "dist");
