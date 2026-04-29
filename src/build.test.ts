@@ -2,7 +2,7 @@ import { afterEach, describe, expect, test } from "bun:test";
 import { existsSync } from "node:fs";
 import { readFile, rm } from "node:fs/promises";
 import { join } from "node:path";
-import { build, distDir } from "./build";
+import { build, distDir, rootDir } from "./build";
 
 describe("build", () => {
   afterEach(async () => {
@@ -40,5 +40,19 @@ describe("build", () => {
     for (const surface of removedSurfaces) {
       expect(html).not.toContain(surface);
     }
+  });
+
+  test("styles include screen-only blank canvas treatments for light and dark themes", async () => {
+    const css = await readFile(join(rootDir, "src/styles.css"), "utf8");
+
+    expect(css).toContain("@media screen");
+    expect(css).toContain(".a11y-inversion");
+    expect(css).toContain("background-color: #ffffff !important");
+    expect(css).toContain("color: #ffffff !important");
+    expect(css).toContain(':root[data-theme="dark"]');
+    expect(css).toContain("--background: #000000");
+    expect(css).toContain("background-color: #000000 !important");
+    expect(css).toContain("color: #000000 !important");
+    expect(css).toContain("opacity: 0 !important");
   });
 });

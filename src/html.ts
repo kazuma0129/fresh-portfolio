@@ -302,11 +302,14 @@ export function renderDocument(): string {
     <script>${themeScript}</script>
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="a11y-inversion">
     <a class="skip-link" href="#main">Skip to main content</a>
+    <p id="a11y-inversion-statement" class="sr-only">
+      This portfolio is intentionally rendered as a blank white canvas for sighted visitors while preserving semantic structure, landmarks, headings, links, and controls for screen reader navigation.
+    </p>
     <div class="page">
       ${renderProfileHeader()}
-      <main id="main">
+      <main id="main" aria-describedby="a11y-inversion-statement">
         ${renderSummary()}
         ${renderExperience()}
         ${renderEducation()}

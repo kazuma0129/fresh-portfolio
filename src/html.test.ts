@@ -12,7 +12,7 @@ describe("HTML generation", () => {
   test("contains expected landmarks and resume sections", () => {
     const html = renderDocument();
 
-    expect(html).toContain("<main id=\"main\">");
+    expect(html).toContain('<main id="main"');
     expect(html).toContain("<footer>");
     expect(html).toContain("<address>");
     expect(html).toContain("Professional Summary");
@@ -51,5 +51,14 @@ describe("HTML generation", () => {
     expect(html).toContain('aria-label="Switch to dark theme"');
     expect(html).toContain('localStorage.getItem("theme")');
     expect(html).toContain('dataset.theme');
+  });
+
+  test("exposes the blank visual concept to assistive technology", () => {
+    const html = renderDocument();
+
+    expect(html).toContain('<body class="a11y-inversion">');
+    expect(html).toContain('id="a11y-inversion-statement"');
+    expect(html).toContain("intentionally rendered as a blank white canvas");
+    expect(html).toContain('<main id="main" aria-describedby="a11y-inversion-statement">');
   });
 });
