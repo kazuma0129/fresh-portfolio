@@ -25,12 +25,12 @@ describe("HTML generation", () => {
     expect(html).toContain("Languages");
   });
 
-  test("has no external CDN script or stylesheet references", () => {
+  test("has no external CDN references", () => {
     const html = renderDocument();
 
     expect(html).not.toMatch(/cdn/i);
-    expect(html.toLowerCase()).not.toContain(`<${"script"}`);
     expect(html).not.toMatch(/<link[^>]+href=["']https?:\/\//i);
+    expect(html).not.toMatch(/<script[^>]+src=["']https?:\/\//i);
   });
 
   test("includes local stylesheet and metadata references", () => {
@@ -42,5 +42,14 @@ describe("HTML generation", () => {
     expect(html).toContain('<meta name="description"');
     expect(html).toContain('<meta property="og:title"');
     expect(html).toContain('<meta name="twitter:card"');
+  });
+
+  test("includes a persistent accessible theme toggle", () => {
+    const html = renderDocument();
+
+    expect(html).toContain('data-theme-toggle');
+    expect(html).toContain('aria-label="Switch to dark theme"');
+    expect(html).toContain('localStorage.getItem("theme")');
+    expect(html).toContain('dataset.theme');
   });
 });

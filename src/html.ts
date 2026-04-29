@@ -15,6 +15,55 @@ const title = "Kazuma Ohashi - Software Engineer | CV";
 const description =
   "Kazuma Ohashi - Software Engineer with 4+ years of experience in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Currently at LINE Corporation, Tokyo, Japan.";
 
+const themeScript = `
+(() => {
+  const storageKey = "theme";
+  const root = document.documentElement;
+  const getSystemTheme = () => window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  const getSavedTheme = () => {
+    try {
+      const savedTheme = localStorage.getItem("theme");
+      return savedTheme === "dark" || savedTheme === "light" ? savedTheme : null;
+    } catch {
+      return null;
+    }
+  };
+  const saveTheme = (theme) => {
+    try {
+      localStorage.setItem(storageKey, theme);
+    } catch {
+      // Ignore storage failures so the control still works for this page view.
+    }
+  };
+  const applyTheme = (theme) => {
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    const toggle = document.querySelector("[data-theme-toggle]");
+
+    if (!toggle) {
+      return;
+    }
+
+    const nextTheme = theme === "dark" ? "light" : "dark";
+    toggle.dataset.themeToggle = nextTheme;
+    toggle.setAttribute("aria-label", \`Switch to \${nextTheme} theme\`);
+    toggle.setAttribute("title", \`Switch to \${nextTheme} theme\`);
+    toggle.querySelector("[data-theme-label]").textContent = nextTheme === "dark" ? "Dark" : "Light";
+  };
+
+  applyTheme(getSavedTheme() || getSystemTheme());
+
+  document.addEventListener("DOMContentLoaded", () => {
+    applyTheme(getSavedTheme() || getSystemTheme());
+    document.querySelector("[data-theme-toggle]")?.addEventListener("click", () => {
+      const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+      saveTheme(nextTheme);
+      applyTheme(nextTheme);
+    });
+  });
+})();
+`.trim();
+
 export function escapeHtml(value: unknown): string {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -61,7 +110,13 @@ function renderProfileHeader(): string {
           </nav>
         </address>
       </div>
-      <img class="profile-mark" src="favicon.svg" width="96" height="96" alt="" />
+      <div class="profile-actions">
+        <button class="theme-toggle" type="button" data-theme-toggle="dark" aria-label="Switch to dark theme" title="Switch to dark theme">
+          <span class="theme-toggle__icon" aria-hidden="true"></span>
+          <span data-theme-label>Dark</span>
+        </button>
+        <img class="profile-mark" src="favicon.svg" width="96" height="96" alt="" />
+      </div>
     </header>
   `;
 }
@@ -244,6 +299,7 @@ export function renderDocument(): string {
     <meta name="twitter:image" content="favicon.svg" />
     <link rel="icon" type="image/svg+xml" href="favicon.svg" />
     <link rel="manifest" href="manifest.json" />
+    <script>${themeScript}</script>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>

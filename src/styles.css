@@ -60,6 +60,28 @@
     }
   }
 
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --muted: #475569;
+    --soft: #f1f5f9;
+    --border: #dbe3ef;
+    --link: #172554;
+    --focus: #2563eb;
+  }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --background: #020617;
+    --foreground: #f8fafc;
+    --muted: #cbd5e1;
+    --soft: #1e293b;
+    --border: #334155;
+    --link: #dbeafe;
+    --focus: #93c5fd;
+  }
+
   @media (prefers-contrast: more) {
     :root {
       --muted: currentColor;
@@ -163,9 +185,16 @@
 
   .profile-header {
     display: flex;
+    align-items: flex-start;
     justify-content: space-between;
     gap: var(--space-4);
     margin-block-end: var(--space-6);
+  }
+
+  .profile-actions {
+    display: grid;
+    justify-items: end;
+    gap: var(--space-3);
   }
 
   .split {
@@ -202,6 +231,48 @@
     border: 1px solid var(--border);
     border-radius: 0.75rem;
     background: #ffffff;
+  }
+
+  .theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    background: var(--soft);
+    color: var(--foreground);
+    padding: 0.35rem 0.65rem;
+    font: inherit;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover {
+    border-color: var(--muted);
+  }
+
+  .theme-toggle:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 3px;
+  }
+
+  .theme-toggle__icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: currentColor;
+    box-shadow: inset -0.3rem -0.3rem 0 0 var(--soft);
+  }
+
+  .theme-toggle[data-theme-toggle="light"] .theme-toggle__icon {
+    background: transparent;
+    box-shadow:
+      0 -0.35rem 0 -0.25rem currentColor,
+      0 0.35rem 0 -0.25rem currentColor,
+      -0.35rem 0 0 -0.25rem currentColor,
+      0.35rem 0 0 -0.25rem currentColor;
   }
 
   .stack-sm,
@@ -329,6 +400,10 @@
   .split,
   .language-list div {
     display: grid;
+  }
+
+  .profile-actions {
+    justify-items: start;
   }
 
   .profile-mark {
