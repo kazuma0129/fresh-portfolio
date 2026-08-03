@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "fresh-portfolio",
+  "compatibility_date": "2026-08-03",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "kazuma0129.work/*",
+      "zone_name": "kazuma0129.work"
+    }
+  ],
+  "assets": {
+    "directory": "./dist"
+  }
+}

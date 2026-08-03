@@ -1,3 +1,5 @@
 .vscode
 _fresh
 dist
+node_modules
+.wrangler
