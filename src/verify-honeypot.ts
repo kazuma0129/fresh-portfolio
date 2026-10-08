@@ -14,7 +14,9 @@ function inspect(value: unknown): void {
     value.forEach(inspect);
   } else if (value && typeof value === "object") {
     const entry = value as Record<string, unknown>;
-    if (entry.event === "honeypot.request" && entry.userAgent === marker &&
+    if (entry.event === "honeypot.login" && entry.userAgent === marker &&
+        entry.submittedUsername === "honeypot-ci" && entry.submittedPassword === "decoy-test-only" &&
+        entry.referer === "https://kazuma0129.work/admin/login" && entry.outcome === "denied" &&
         typeof entry.requestId === "string" &&
         typeof entry.clientIp === "string" && isIP(entry.clientIp) !== 0) {
       loggedIds.add(entry.requestId);
@@ -64,19 +66,22 @@ try {
   for (let attempt = 0; attempt < 12 && !verified; attempt++) {
     await Bun.sleep(3000);
     if (tail.exitCode !== null) throw new Error("Cloudflare log tail exited before verification");
-    const response = await fetch("https://kazuma0129.work/admin/status", {
-      headers: { "User-Agent": marker }, signal: AbortSignal.timeout(10_000),
+    const response = await fetch("https://kazuma0129.work/admin/login", {
+      method: "POST",
+      headers: { "User-Agent": marker, "Content-Type": "application/x-www-form-urlencoded", "Referer": "https://kazuma0129.work/admin/login" },
+      body: new URLSearchParams({ username: "honeypot-ci", password: "decoy-test-only" }),
+      signal: AbortSignal.timeout(10_000),
     });
     const id = response.headers.get("X-Request-Id");
-    if (response.status === 200 && response.headers.get("Cache-Control") === "no-store" && id) {
+    if (response.status === 401 && response.headers.get("Cache-Control") === "no-store" && id) {
       requestIds.add(id);
       if (loggedIds.has(id)) verified = true;
     }
     await response.arrayBuffer();
     await Bun.sleep(2000);
   }
-  if (!verified) throw new Error("No correlated honeypot log with a client IP was received");
-  console.log("Verified production honeypot response and matching log with client IP. Raw logs remain private.");
+  if (!verified) throw new Error("No correlated login log with submitted fields, referrer, and a client IP was received");
+  console.log("Verified production login denial and matching log with dummy credentials, referrer, and client IP. Raw logs remain private.");
 } finally {
   tail.kill("SIGINT");
   await Promise.race([tail.exited, Bun.sleep(3000)]);

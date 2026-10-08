@@ -1,6 +1,10 @@
+import { isLoginPath, loginDocument, readLoginAttempt, refererInfo, sessionId } from "./honeypot-login.ts";
+
 /** Low-interaction decoys for paths observed in Cloudflare traffic analytics. */
 export const honeypotPaths = [
   "/wp",
+  "/wp-login.php",
+  "/wp-admin",
   "/admin",
   "/index.php",
   "/blog",
@@ -42,7 +46,7 @@ function logValue(value: string | null | undefined, limit: number): string | nul
 function decoyBody(path: HoneypotPath, isStatus: boolean): string {
   if (path === "/.env") {
     // Deliberately synthetic configuration, with no credentials or working services.
-    return "APP_NAME=Portfolio\nAPP_ENV=production\nAPP_DEBUG=false\n";
+    return "APP_NAME=Portfolio\nAPP_ENV=production\nAPP_DEBUG=false\nADMIN_PATH=/admin/login\n";
   }
 
   const title = isStatus ? "Service status" : "Maintenance";
@@ -61,7 +65,7 @@ function decoyBody(path: HoneypotPath, isStatus: boolean): string {
   <main>
     <h1>${title}</h1>
     <p>${message}</p>
-    ${isStatus ? "" : '<p><a href="/admin/status">Service status</a></p>'}
+    ${isStatus ? "" : '<p><a href="/admin/login">Administration</a> · <a href="/admin/status">Service status</a></p>'}
   </main>
 </body>
 </html>`;
@@ -74,20 +78,27 @@ export default {
     if (!trap) return env.ASSETS.fetch(request);
 
     const requestId = crypto.randomUUID();
-    const isStatus = normalizePath(url.pathname).replace(/\/$/, "") === "/admin/status";
+    const path = normalizePath(url.pathname).replace(/\/$/, "");
+    const isStatus = path === "/admin/status";
+    const login = isLoginPath(path);
+    const wordpress = path.startsWith("/wp") || path.endsWith("/wp-login.php");
+    const visitorSession = login ? sessionId(request) : null;
     const readable = request.method === "GET" || request.method === "HEAD";
-    const status = readable ? 200 : 405;
+    const submission = login && request.method === "POST" ? await readLoginAttempt(request) : null;
+    const status = readable ? 200 : submission?.status ?? 405;
 
     // This only records requests reaching this Worker; WAF-blocked requests stay
     // in Security Events. IP identifies the connecting client/proxy, not a person.
-    // Never read or log bodies, cookies, authorization, or query-string values.
+    // Only allowlisted login fields are read on the decoy login POST endpoints.
+    // No other body fields, cookies, authorization, or query values are logged.
     console.log({
-      event: "honeypot.request",
-      schemaVersion: 1,
+      event: submission ? "honeypot.login" : "honeypot.request",
+      schemaVersion: 2,
       requestId,
       timestamp: new Date().toISOString(),
       trap,
-      stage: isStatus ? "followup" : "entry",
+      stage: submission ? "login_attempt" : login ? "login_view" : isStatus ? "followup" : "entry",
+      sessionId: visitorSession,
       method: logValue(request.method, 16),
       hostname: logValue(url.hostname, 253),
       path: logValue(url.pathname, 512),
@@ -96,10 +107,13 @@ export default {
       clientIpv6: logValue(request.headers.get("CF-Connecting-IPv6"), 64),
       rayId: logValue(request.headers.get("CF-Ray"), 128),
       userAgent: logValue(request.headers.get("User-Agent"), 512),
+      ...refererInfo(request.headers.get("Referer")),
+      fetchSite: logValue(request.headers.get("Sec-Fetch-Site"), 32),
       country: logValue(request.cf?.country, 8),
       asn: request.cf?.asn ?? null,
       colo: logValue(request.cf?.colo, 16),
       status,
+      ...submission?.attempt,
     });
 
     const headers = new Headers({
@@ -110,17 +124,20 @@ export default {
       "CDN-Cache-Control": "no-store",
       "X-Robots-Tag": "noindex, nofollow, noarchive",
       "X-Content-Type-Options": "nosniff",
-      "Content-Security-Policy": "default-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
-      "Referrer-Policy": "no-referrer",
+      "Content-Security-Policy": `default-src 'none'; style-src 'nonce-${requestId}'; base-uri 'none'; form-action ${login ? "'self'" : "'none'"}; frame-ancestors 'none'`,
+      "Referrer-Policy": "same-origin",
       "X-Request-Id": requestId,
     });
-    if (!readable) {
-      headers.set("Allow", "GET, HEAD");
+    if (visitorSession) headers.set("Set-Cookie", `__Host-admin_session=${visitorSession}; Path=/; HttpOnly; Secure; SameSite=Strict; Max-Age=1800`);
+    if (!readable && !submission) {
+      headers.set("Allow", login ? "GET, HEAD, POST" : "GET, HEAD");
       headers.set("Content-Type", "text/plain; charset=utf-8");
     }
 
     return new Response(
-      request.method === "HEAD" ? null : readable ? decoyBody(trap, isStatus) : "Method not allowed\n",
+      request.method === "HEAD" ? null : login && (readable || submission)
+        ? loginDocument(requestId, wordpress, Boolean(submission))
+        : readable ? decoyBody(trap, isStatus) : "Method not allowed\n",
       { status, headers },
     );
   },
