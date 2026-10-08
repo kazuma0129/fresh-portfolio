@@ -1,6 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "fresh-portfolio",
+  "main": "src/worker.ts",
   "compatibility_date": "2026-08-03",
   "workers_dev": true,
   "routes": [
@@ -10,6 +11,23 @@
     }
   ],
   "assets": {
-    "directory": "./dist"
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": [
+      "/wp", "/wp/*",
+      "/admin", "/admin/*",
+      "/index.php", "/index.php/*",
+      "/blog", "/blog/*",
+      "/1.php", "/1.php/*",
+      "/wp-content/plugins/index.php", "/wp-content/plugins/index.php/*",
+      "/.env", "/.env/*"
+    ]
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "logs": {
+      "invocation_logs": false
+    }
   }
 }
