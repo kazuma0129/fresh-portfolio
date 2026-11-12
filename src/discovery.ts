@@ -109,7 +109,7 @@ Use the portfolio to check Kazuma Ohashi's published work experience, open-sourc
       // Specific user-agent groups do not inherit wildcard rules (RFC 9309).
       ...["*", "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User",
         "GPTBot", "ClaudeBot", "Claude-Web", "anthropic-ai", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider", "Amazonbot"].map(agent =>
-        ["User-agent: " + agent, "Allow: /", "Disallow: /admin", "Disallow: /wp-admin", "Disallow: /cdn-cgi/",
+        ["User-agent: " + agent, "Allow: /",
           "Content-Signal: search=yes, ai-input=yes, ai-train=yes", ""].join("\n")),
       "Sitemap: " + absolute("/sitemap.xml"), "",
     ].join("\n"),
