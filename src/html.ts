@@ -10,7 +10,8 @@ import {
   skills,
 } from "./profile.ts";
 
-const siteUrl = "https://kazuma0129.work/";
+import { absolute } from "./site.ts";
+const siteUrl = absolute("/");
 const title = "Kazuma Ohashi - Software Engineer | CV";
 const description =
   "Kazuma Ohashi - Software Engineer with 4+ years of experience in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Currently at LINE Corporation, Tokyo, Japan.";
@@ -288,6 +289,7 @@ export function renderDocument(): string {
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${attr(description)}" />
     <meta name="author" content="${attr(personalInfo.name)}" />
+    <link rel="canonical" href="${attr(siteUrl)}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${attr(siteUrl)}" />
     <meta property="og:title" content="${attr(title)}" />

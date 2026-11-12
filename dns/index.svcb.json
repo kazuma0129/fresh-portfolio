@@ -1,0 +1,10 @@
+{
+  "type": "SVCB",
+  "name": "_index._agents.kazuma0129.work",
+  "ttl": 300,
+  "data": {
+    "priority": 1,
+    "target": "kazuma0129.work.",
+    "value": "alpn=\"h2\" port=443 key65409=\"ai-catalog.json\""
+  }
+}

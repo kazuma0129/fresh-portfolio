@@ -29,7 +29,8 @@ describe("HTML generation", () => {
     const html = renderDocument();
 
     expect(html).not.toMatch(/cdn/i);
-    expect(html).not.toMatch(/<link[^>]+href=["']https?:\/\//i);
+    expect(html).not.toMatch(/<link[^>]+rel=["'](?:stylesheet|preload)["'][^>]+href=["']https?:\/\//i);
+    expect(html).toContain('<link rel="canonical" href="https://kazuma0129.work/"');
     expect(html).not.toMatch(/<script[^>]+src=["']https?:\/\//i);
   });
 
