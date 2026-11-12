@@ -12,7 +12,7 @@ import {
 
 import { absolute } from "./site.ts";
 const siteUrl = absolute("/");
-const title = "Kazuma Ohashi - Software Engineer | CV";
+const title = "Kazuma Ohashi | Software Engineering Portfolio and API";
 const description =
   "Kazuma Ohashi - Software Engineer with 4+ years of experience in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Currently at LINE Corporation, Tokyo, Japan.";
 
@@ -281,6 +281,14 @@ function renderLanguages(): string {
 }
 
 export function renderDocument(): string {
+  const person = {
+    "@context": "https://schema.org", "@type": "Person", "@id": siteUrl + "#person",
+    name: personalInfo.name, url: siteUrl, description: personalInfo.summary, jobTitle: "Software Engineer",
+    knowsAbout: ["Software engineering", "JavaScript", "TypeScript", "Node.js"],
+    sameAs: links.map(link => link.url),
+    contactPoint: { "@type": "ContactPoint", contactType: "Professional inquiries", email: personalInfo.email, url: absolute("/contact") },
+    address: { "@type": "PostalAddress", addressLocality: "Tokyo", addressCountry: "JP" },
+  };
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -289,6 +297,8 @@ export function renderDocument(): string {
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${attr(description)}" />
     <meta name="author" content="${attr(personalInfo.name)}" />
+    <meta name="keywords" content="Software Engineering Portfolio, Portfolio API, Software engineering" />
+    <script type="application/ld+json">${JSON.stringify(person).replaceAll("<", "\\u003c")}</script>
     <link rel="canonical" href="${attr(siteUrl)}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${attr(siteUrl)}" />
@@ -322,6 +332,12 @@ export function renderDocument(): string {
         ${renderLanguages()}
       </main>
       <footer>
+        <nav aria-label="Portfolio resources">
+          <h2>Software Engineering Portfolio API</h2>
+          <a href="/docs">API documentation</a> · <a href="/developers">Developer portal</a> ·
+          <a href="/docs/mcp">Portfolio MCP server</a> · <a href="/about">About</a> ·
+          <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a>
+        </nav>
         <p>Last updated at build time.</p>
       </footer>
     </div>

@@ -57,7 +57,16 @@ Run the HTTP checks against your local preview, or omit the origin to check prod
 
 ```sh
 node scripts/verify-discovery.mjs http://localhost:3000
+node scripts/verify-ora.mjs http://localhost:3000
 ```
+
+The versioned REST directory is at `/api/v1`. The original JSON URLs are
+supported. `/docs` describes the public contract and `/developers` provides
+a read-only sandbox. A SQLite-backed Cloudflare Durable Object atomically
+counts requests per client for each minute, with separate budgets for the
+public API (120) and sandbox (5). The Ora verification exhausts only the
+sandbox allowance to check a real 429. The homepage retains its intentional
+blank screen presentation. New reference pages use a separate stylesheet.
 
 ## DNS-AID
 

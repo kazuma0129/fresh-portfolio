@@ -1,0 +1,11 @@
+:root { color-scheme: light dark; font: 100%/1.6 system-ui, sans-serif; }
+body { max-width: 48rem; margin: 0 auto; padding: 1.5rem; }
+header, footer { display: flex; flex-wrap: wrap; gap: 1rem; padding-block: 1rem; }
+header { justify-content: space-between; border-block-end: 1px solid GrayText; }
+footer { border-block-start: 1px solid GrayText; margin-block-start: 3rem; }
+h1, h2 { line-height: 1.2; }
+h2 { margin-block-start: 2rem; }
+pre { overflow: auto; padding: 1rem; border: 1px solid GrayText; border-radius: .25rem; }
+pre:has(:empty) { display: none; }
+input, button { font: inherit; }
+dd { margin-inline-start: 1rem; margin-block-end: .75rem; }

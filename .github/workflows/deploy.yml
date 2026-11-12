@@ -41,6 +41,7 @@ jobs:
           curl --silent --show-error --fail --retry 20 --retry-delay 1 --retry-connrefused \
             --output /dev/null http://127.0.0.1:8787/
           node scripts/verify-discovery.mjs http://127.0.0.1:8787
+          node scripts/verify-ora.mjs http://127.0.0.1:8787
 
       - name: Deploy Worker
         run: bunx wrangler deploy

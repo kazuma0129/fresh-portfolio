@@ -2,9 +2,9 @@ import Negotiator from "negotiator";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { CallToolRequestSchema, ErrorCode, ListToolsRequestSchema, McpError } from "@modelcontextprotocol/sdk/types.js";
-import { apiPath, homepageLinks, origin, serverInfo, skillDescription } from "./site.ts";
-
-interface Assets { fetch(request: Request): Promise<Response> }
+import { apiPath, homepageLinks, origin, pagePaths, serverInfo, skillDescription } from "./site.ts";
+import { handleApi, type Assets, type Env } from "./api.ts";
+export { ApiQuota } from "./quota.ts";
 
 async function handleMcp(request: Request, assets: Assets) {
   const source = request.headers.get("origin");
@@ -34,18 +34,37 @@ async function handleMcp(request: Request, assets: Assets) {
 }
 
 export default {
-  async fetch(request: Request, env: { ASSETS: Assets }): Promise<Response> {
+  async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    if (url.pathname === "/mcp") return handleMcp(request, env.ASSETS);
-    if (url.pathname !== "/" || !["GET", "HEAD"].includes(request.method)) return env.ASSETS.fetch(request);
     const accept = request.headers.get("accept") || "*/*";
+    if (url.pathname === "/api" || url.pathname.startsWith("/api/")) return handleApi(request, env);
+    if (url.pathname === "/mcp") {
+      if (["GET", "HEAD"].includes(request.method) && /text\/html/i.test(accept) &&
+          new Negotiator({ headers: { accept } }).mediaType(["text/event-stream", "text/html"]) === "text/html") {
+        return new Response(null, { status: 303, headers: { Location: "/docs/mcp", Vary: "Accept", "Cache-Control": "no-store" } });
+      }
+      return handleMcp(request, env.ASSETS);
+    }
+    const read = request.method === "GET" || request.method === "HEAD";
     const type = new Negotiator({ headers: { accept } }).mediaType(["text/html", "text/markdown"]);
+    if (!read || !pagePaths.includes(url.pathname)) {
+      const asset = await env.ASSETS.fetch(request);
+      if (!read || asset.status !== 404) return asset;
+      const headers = new Headers(asset.headers);
+      headers.set("Vary", "Accept");
+      headers.set("Cache-Control", "no-store");
+      if (type !== "text/markdown") return new Response(asset.body, { status: 404, headers });
+      const body = "# Page not found\n\nThis address does not identify a published portfolio page. See the [API documentation](/docs) or the [sitemap](/sitemap.xml) for available URLs.\n";
+      return new Response(request.method === "HEAD" ? null : body, { status: 404,
+        headers: { "Content-Type": "text/markdown; charset=utf-8", Vary: "Accept", "Cache-Control": "no-store" } });
+    }
     if (!type) return new Response(null, { status: 406, headers: { Vary: "Accept" } });
-    if (type === "text/markdown") url.pathname = "/portfolio.md";
+    const homepage = url.pathname === "/";
+    if (type === "text/markdown") url.pathname = homepage ? "/portfolio.md" : url.pathname + ".md";
     const asset = await env.ASSETS.fetch(new Request(url, request));
     const response = new Response(request.method === "HEAD" ? null : asset.body, asset);
     response.headers.append("Vary", "Accept");
-    response.headers.set("Link", homepageLinks);
+    if (homepage) response.headers.set("Link", homepageLinks);
     // Cloudflare's shared cache does not generally key on arbitrary Vary values.
     response.headers.set("Cache-Control", "private, max-age=0, must-revalidate");
     return response;

@@ -3,7 +3,8 @@ export const absolute = (path: string) => new URL(path, origin).href;
 export const serverInfo = { name: "work.kazuma0129/portfolio", version: "1.0.0" };
 export const skillName = "navigate-portfolio";
 export const skillPath = `/.well-known/agent-skills/${skillName}/SKILL.md`;
-export const skillDescription = "Find canonical links to sections of Kazuma Ohashi's public CV.";
+export const skillDescription = "Use when you need to find or cite Kazuma Ohashi's engineering experience, technical skills or open-source work from his public CV.";
+export const pagePaths = ["/", "/docs", "/docs/mcp", "/developers", "/about", "/contact", "/privacy"];
 export const apiPath = "/api/portfolio.json";
 export const apiDocsPath = "/docs/api.md";
 export const specPath = "/openapi.json";
@@ -15,6 +16,7 @@ export const cardType = "application/mcp-server-card+json";
 export const homepageLinks = [
   `<${catalogPath}>; rel="api-catalog"; type="application/linkset+json"`,
   `<${apiDocsPath}>; rel="service-doc"; type="text/markdown"`,
+  '</docs>; rel="service-doc"; type="text/html"',
   `<${ardPath}>; rel="describedby"; type="application/json"`,
   '</>; rel="alternate"; type="text/markdown"',
 ].join(", ");

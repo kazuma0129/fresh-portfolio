@@ -1,11 +1,18 @@
 import { createHash } from "node:crypto";
 import { parseHTML } from "linkedom";
 import TurndownService from "turndown";
+import { openApi } from "./openapi.ts";
 import { absolute, apiDocsPath, apiPath, ardPath, cardPath, cardType, catalogPath, origin, serverInfo, skillDescription, skillName, skillPath, specPath, statusPath } from "./site.ts";
 
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
 export const legacyCardPath = "/.well-known/mcp/server-card.json";
 export const skillsIndex = "/.well-known/agent-skills/index.json";
+
+export function articleMarkdown(html: string) {
+  const main = parseHTML(html).document.querySelector("main")!;
+  main.querySelectorAll("form, script, #sandbox-result").forEach(el => el.remove());
+  return new TurndownService({ headingStyle: "atx" }).turndown(main.innerHTML) + "\n";
+}
 
 export function renderDiscovery(html: string, publicPages: string[]): Record<string, string> {
   const { document } = parseHTML(html);
@@ -24,6 +31,11 @@ description: "${skillDescription}"
 
 # Navigate the public portfolio
 
+## When to use this skill
+
+Use this skill when finding evidence for Kazuma Ohashi's engineering experience,
+open-source work or technical skills, or when you need a canonical link to cite.
+
 Fetch [the section index](${absolute(apiPath)}) and select a section by its title.
 Use the URL returned for that section as a citation. To read its content, fetch
 [the public CV](${absolute("/")}) with \`Accept: text/markdown\`. Only cite facts
@@ -32,46 +44,44 @@ present on the page. No sign-in, account creation, or API key is required.
   const card = {
     $schema: "https://static.modelcontextprotocol.io/schemas/v1/server-card.schema.json",
     ...serverInfo, title: "Portfolio navigation",
-    description: skillDescription, websiteUrl: absolute("/"),
+    description: "Find canonical links to sections of Kazuma Ohashi's public CV.", websiteUrl: absolute("/"),
     remotes: [{ type: "streamable-http", url: absolute("/mcp") }],
   };
   const entry = (id: string, displayName: string, type: string, path: string, queries: string[]) => ({
     identifier: "urn:air:" + new URL(origin).hostname + ":" + id, displayName, type, url: absolute(path),
     representativeQueries: queries,
   });
-  const get = (summary: string, operationId: string, schema: object) => ({
-    get: { operationId, summary, responses: { "200": { description: summary, content: { "application/json": { schema } } } } },
-  });
-  const link = { type: "string", format: "uri" };
   return {
     "/portfolio.md": markdown,
     [apiPath]: json(detail),
     [statusPath]: json({ status: "ok", service: "portfolio-index" }),
-    [apiDocsPath]: `# Public portfolio API
+    ["/llms.txt"]: `# Kazuma Ohashi — Software Engineering Portfolio
 
-GET [the section index](${absolute(apiPath)}) to list section titles and canonical links.
-GET [the status document](${absolute(statusPath)}) to check that the published API assets are available.
-Both return JSON. This API only reads the public site and requires no credentials.
+> Public engineering CV with a read-only API and MCP server for locating and citing CV sections.
 
-The [OpenAPI description](${absolute(specPath)}) documents both operations.
-MCP clients can connect to [the Streamable HTTP endpoint](${absolute("/mcp")}) and call
-\`list_portfolio_sections\` to read the same index.
+## When to use this site
+
+Use the portfolio to check Kazuma Ohashi's published work experience, open-source contributions and technical skills. Fetch the CV with Accept: text/markdown to read the source. Use GET /api/v1/portfolio for canonical links, or call list_portfolio_sections with {} after connecting to the MCP server.
+
+## Documentation
+
+- [Portfolio CV](${absolute("/portfolio.md")}): Read the public profile.
+- [API reference](${absolute("/docs.md")}): Requests, authentication, errors and version policy.
+- [MCP server](${absolute("/docs/mcp.md")}): Connect and call the section lookup tool.
+- [Developer portal](${absolute("/developers")}): Try a request in the read-only sandbox.
+- [OpenAPI](${absolute(specPath)}): Typed API operations and response schemas.
+
+## Contact
+
+- [About](${absolute("/about.md")}): Scope of the portfolio.
+- [Contact](${absolute("/contact.md")}): Ask a professional question or suggest a correction.
+- [Privacy](${absolute("/privacy.md")}): How the site handles requests.
 `,
-    [specPath]: json({ openapi: "3.1.0", info: { title: "Public portfolio index", version: serverInfo.version },
-      servers: [{ url: origin }], paths: {
-        [apiPath]: get("List published CV sections", "listPortfolioSections", {
-          type: "object", required: ["url", "sections"], properties: { url: link, sections: {
-            type: "array", items: { type: "object", required: ["title", "url"], properties: { title: { type: "string" }, url: link } },
-          } },
-        }),
-        [statusPath]: get("Read the deployment status document", "getPublicationStatus", {
-          type: "object", required: ["status", "service"], properties: { status: { const: "ok" }, service: { const: "portfolio-index" } },
-        }),
-      } }),
-    [catalogPath]: json({ linkset: [{ anchor: absolute(apiPath),
+    [specPath]: json(openApi()),
+    [catalogPath]: json({ linkset: [{ anchor: absolute("/api/v1/portfolio"),
       "service-desc": [{ href: absolute(specPath), type: "application/json" }],
-      "service-doc": [{ href: absolute(apiDocsPath), type: "text/markdown" }],
-      status: [{ href: absolute(statusPath), type: "application/json" }],
+      "service-doc": [{ href: absolute("/docs"), type: "text/html" }, { href: absolute(apiDocsPath), type: "text/markdown" }],
+      status: [{ href: absolute("/api/v1/status"), type: "application/json" }],
     }] }),
     [cardPath]: json(card),
     [legacyCardPath]: json({ serverInfo, transport: { type: "streamable-http", endpoint: absolute("/mcp") }, capabilities: { tools: {} } }),
@@ -96,6 +106,7 @@ MCP clients can connect to [the Streamable HTTP endpoint](${absolute("/mcp")}) a
     ].join("\n"),
     "/_headers": Object.entries({
       "/robots.txt": "text/plain", "/sitemap.xml": "application/xml", "/portfolio.md": "text/markdown",
+      "/llms.txt": "text/plain", ...Object.fromEntries(publicPages.filter(path => path !== "/").map(path => [path + ".md", "text/markdown"])),
       [apiDocsPath]: "text/markdown", [skillPath]: "text/markdown", [catalogPath]: "application/linkset+json",
       [ardPath]: "application/json", [cardPath]: cardType, [legacyCardPath]: "application/json",
     }).map(([path, type]) => `${path}\n  Content-Type: ${type}; charset=utf-8${[ardPath, cardPath, legacyCardPath, skillPath, skillsIndex].includes(path) ? "\n  Access-Control-Allow-Origin: *" : ""}`).concat(`${skillsIndex}\n  Access-Control-Allow-Origin: *`).join("\n\n") + "\n",
