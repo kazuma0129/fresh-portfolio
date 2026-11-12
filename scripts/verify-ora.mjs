@@ -25,6 +25,22 @@ const sitemap = await (await http("/sitemap.xml", 200, "application/xml")).text(
 const xml = new DOMParser().parseFromString(sitemap, "text/xml");
 assert.deepEqual([...xml.querySelectorAll("url > loc")].map(loc => loc.textContent).sort(), pagePaths.map(p => origin + p).sort());
 const home = parseHTML(await (await http("/", 200, "text/html")).text()).document;
+const metadata = [...home.querySelectorAll('script[type="application/ld+json"]')].map(node => JSON.parse(node.textContent));
+const profilePage = metadata.find(node => node["@type"] === "ProfilePage");
+const faq = metadata.find(node => node["@type"] === "FAQPage");
+assert.equal(home.querySelector('a[rel="author"]').textContent, profilePage.author.name);
+assert.equal(home.querySelector("footer time").getAttribute("datetime"), profilePage.dateModified);
+assert.equal(xml.querySelector("url > lastmod").textContent, profilePage.dateModified);
+assert.ok(profilePage.citation.every(url => [...home.querySelectorAll("cite a")].some(a => a.href === url)));
+const questions = [...home.querySelectorAll("main details")];
+assert.equal(questions.length, faq.mainEntity.length);
+assert.ok(questions.length >= 2);
+for (const [i, item] of faq.mainEntity.entries()) {
+  assert.equal(item.name, questions[i].querySelector("summary").textContent);
+  assert.ok(questions[i].querySelector("p").textContent.startsWith(item.acceptedAnswer.text));
+}
+const description = home.querySelector('meta[name="description"]').content;
+assert.ok(description.length >= 50 && description.length <= 160 && description.includes("Kazuma Ohashi"));
 const jsonLd = JSON.parse(home.querySelector('script[type="application/ld+json"]').textContent);
 assert.equal(jsonLd["@type"], "Person");
 assert.equal(jsonLd.name, "Kazuma Ohashi");

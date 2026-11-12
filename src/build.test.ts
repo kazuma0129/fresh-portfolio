@@ -23,6 +23,19 @@ describe("build", () => {
     expect(existsSync(join(distDir, "manifest.json"))).toBe(true);
   });
 
+  test("each crawler can read the public CV and retains the same exclusions", async () => {
+    await build();
+    const robots = await readFile(join(distDir, "robots.txt"), "utf8");
+    const groups = robots.trim().split(/\n\n+/).filter(group => group.startsWith("User-agent:"));
+    for (const agent of ["*", "GPTBot", "ChatGPT-User", "ClaudeBot", "anthropic-ai", "Claude-Web", "CCBot", "Google-Extended", "PerplexityBot", "Bytespider"]) {
+      const group = groups.find(group => group.startsWith("User-agent: " + agent + "\n"));
+      expect(group?.split("\n")).toContain("Allow: /");
+      expect(group?.split("\n").filter(rule => rule.startsWith("Disallow: "))).toEqual([
+        "Disallow: /admin", "Disallow: /wp-admin", "Disallow: /cdn-cgi/",
+      ]);
+    }
+  });
+
   test("generated output excludes removed runtime surfaces", async () => {
     await build();
 

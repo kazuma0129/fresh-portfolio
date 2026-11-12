@@ -2,7 +2,7 @@ import Negotiator from "negotiator";
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { CallToolRequestSchema, ErrorCode, ListToolsRequestSchema, McpError } from "@modelcontextprotocol/sdk/types.js";
-import { apiPath, homepageLinks, origin, pagePaths, serverInfo, skillDescription } from "./site.ts";
+import { apiPath, homepageLinks, origin, pagePaths, sectionTool, serverInfo } from "./site.ts";
 import { handleApi, type Assets, type Env } from "./api.ts";
 export { ApiQuota } from "./quota.ts";
 
@@ -13,13 +13,12 @@ async function handleMcp(request: Request, assets: Assets) {
   if (request.method !== "POST")
     return new Response(null, { status: 405, headers: { Allow: "POST" } });
   const server = new Server(serverInfo, { capabilities: { tools: {} } });
-  const tool = "list_portfolio_sections";
   server.setRequestHandler(ListToolsRequestSchema, () => ({
-    tools: [{ name: tool, description: skillDescription, inputSchema: { type: "object", properties: {}, additionalProperties: false },
+    tools: [{ ...sectionTool,
       annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false } }],
   }));
   server.setRequestHandler(CallToolRequestSchema, async ({ params }) => {
-    if (params.name !== tool || Object.keys(params.arguments ?? {}).length)
+    if (params.name !== sectionTool.name || Object.keys(params.arguments ?? {}).length)
       throw new McpError(ErrorCode.InvalidParams, "Use list_portfolio_sections with no arguments");
     const index = await assets.fetch(new Request(new URL(apiPath, request.url)));
     if (!index.ok) throw new McpError(ErrorCode.InternalError, "Section index unavailable");

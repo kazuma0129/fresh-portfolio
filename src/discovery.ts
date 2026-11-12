@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { parseHTML } from "linkedom";
 import TurndownService from "turndown";
 import { openApi } from "./openapi.ts";
+import { homepageModified, sectionTool } from "./site.ts";
 import { absolute, apiDocsPath, apiPath, ardPath, cardPath, cardType, catalogPath, origin, serverInfo, skillDescription, skillName, skillPath, specPath, statusPath } from "./site.ts";
 
 const json = (value: unknown) => JSON.stringify(value, null, 2) + "\n";
@@ -84,6 +85,12 @@ Use the portfolio to check Kazuma Ohashi's published work experience, open-sourc
       status: [{ href: absolute("/api/v1/status"), type: "application/json" }],
     }] }),
     [cardPath]: json(card),
+    // Compatibility manifest for clients that use this pre-standard discovery URL.
+    "/.well-known/mcp.json": json({
+      schema_version: "1.0", name: serverInfo.name, version: serverInfo.version, description: card.description,
+      url: absolute("/mcp"), transport: "streamable-http",
+      tools: [{ name: sectionTool.name, description: sectionTool.description, input_schema: sectionTool.inputSchema }],
+    }),
     [legacyCardPath]: json({ serverInfo, transport: { type: "streamable-http", endpoint: absolute("/mcp") }, capabilities: { tools: {} } }),
     [skillPath]: skill,
     [skillsIndex]: json({ $schema: "https://schemas.agentskills.io/discovery/0.2.0/schema.json", skills: [{
@@ -97,12 +104,14 @@ Use the portfolio to check Kazuma Ohashi's published work experience, open-sourc
         entry("skill:navigate-portfolio", "Navigate the portfolio", "text/markdown", skillPath, ["How do I cite a CV section?", "How can I read the CV as Markdown?"]),
       ],
     }),
-    "/sitemap.xml": `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${publicPages.map(path => "  <url><loc>" + absolute(path).replaceAll("&", "&amp;") + "</loc></url>").join("\n")}\n</urlset>\n`,
+    "/sitemap.xml": `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${publicPages.map(path => `  <url><loc>${absolute(path).replaceAll("&", "&amp;")}</loc>${path === "/" ? `<lastmod>${homepageModified}</lastmod>` : ""}</url>`).join("\n")}\n</urlset>\n`,
     "/robots.txt": [
       // Specific user-agent groups do not inherit wildcard rules (RFC 9309).
-      ...["*", "OAI-SearchBot", "Claude-SearchBot", "PerplexityBot", "GPTBot", "ClaudeBot", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider", "Amazonbot"].map(agent => "User-agent: " + agent),
-      "Allow: /", "Disallow: /admin", "Disallow: /wp-admin", "Disallow: /cdn-cgi/",
-      "Content-Signal: search=yes, ai-input=yes, ai-train=yes", "", "Sitemap: " + absolute("/sitemap.xml"), "",
+      ...["*", "OAI-SearchBot", "ChatGPT-User", "Claude-SearchBot", "Claude-User", "PerplexityBot", "Perplexity-User",
+        "GPTBot", "ClaudeBot", "Claude-Web", "anthropic-ai", "Google-Extended", "Applebot-Extended", "CCBot", "Bytespider", "Amazonbot"].map(agent =>
+        ["User-agent: " + agent, "Allow: /", "Disallow: /admin", "Disallow: /wp-admin", "Disallow: /cdn-cgi/",
+          "Content-Signal: search=yes, ai-input=yes, ai-train=yes", ""].join("\n")),
+      "Sitemap: " + absolute("/sitemap.xml"), "",
     ].join("\n"),
     "/_headers": Object.entries({
       "/robots.txt": "text/plain", "/sitemap.xml": "application/xml", "/portfolio.md": "text/markdown",

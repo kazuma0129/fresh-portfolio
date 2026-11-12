@@ -10,11 +10,24 @@ import {
   skills,
 } from "./profile.ts";
 
-import { absolute } from "./site.ts";
+import { absolute, homepageModified } from "./site.ts";
 const siteUrl = absolute("/");
 const title = "Kazuma Ohashi | Software Engineering Portfolio and API";
 const description =
-  "Kazuma Ohashi - Software Engineer with 4+ years of experience in frontend and backend development, specializing in JavaScript, TypeScript, and Node.js. Currently at LINE Corporation, Tokyo, Japan.";
+  "Explore Kazuma Ohashi’s software engineering portfolio, including his work on the LIFF SDK, open-source contributions, and a public API for citing his CV.";
+
+const questions = [
+  { question: "Where can I find Kazuma Ohashi’s open-source work?",
+    answer: "The Open Source Contributions section links to the Vue Trusted Types RFC discussion and the merged ESLint plugin change. Follow the repository links to read the proposals and code.", href: "/#opensource-heading", label: "Open Source Contributions" },
+  { question: "How can I cite a specific part of the CV?",
+    answer: "Get the section index from /api/v1/portfolio. Each entry contains a title and a permanent link to that section of the CV.", href: "/docs", label: "API documentation" },
+  { question: "Do I need an API key to use the portfolio MCP server?",
+    answer: "The public MCP server works without an account or API key. Connect to /mcp using Streamable HTTP and call list_portfolio_sections with an empty object.", href: "/docs/mcp", label: "MCP connection guide" },
+];
+
+function structuredData(value: object) {
+  return `<script type="application/ld+json">${JSON.stringify(value).replaceAll("<", "\\u003c")}</script>`;
+}
 
 const themeScript = `
 (() => {
@@ -235,7 +248,7 @@ function renderOpenSource(): string {
       <div class="stack-sm" role="list">
         ${openSourceContributions.map((item) => `
           <article role="listitem">
-            ${externalLink(item.url, item.title)}
+            <cite>${externalLink(item.url, item.title)}</cite>
             <p>${escapeHtml(item.description)}</p>
             <span class="tag">${escapeHtml(item.type)}</span>
           </article>
@@ -289,6 +302,18 @@ export function renderDocument(): string {
     contactPoint: { "@type": "ContactPoint", contactType: "Professional inquiries", email: personalInfo.email, url: absolute("/contact") },
     address: { "@type": "PostalAddress", addressLocality: "Tokyo", addressCountry: "JP" },
   };
+  const author = { "@type": "Person", "@id": person["@id"], name: personalInfo.name, url: absolute("/about") };
+  const profilePage = {
+    "@context": "https://schema.org", "@type": "ProfilePage", "@id": siteUrl + "#profile",
+    url: siteUrl, name: title, description, mainEntity: { "@id": person["@id"] }, author,
+    citation: openSourceContributions.map(item => item.url), dateModified: homepageModified,
+  };
+  const faq = {
+    "@context": "https://schema.org", "@type": "FAQPage", "@id": siteUrl + "#portfolio-faq",
+    mainEntity: questions.map(({ question, answer }) => ({
+      "@type": "Question", name: question, acceptedAnswer: { "@type": "Answer", text: answer },
+    })),
+  };
   return `<!doctype html>
 <html lang="en">
   <head>
@@ -298,7 +323,9 @@ export function renderDocument(): string {
     <meta name="description" content="${attr(description)}" />
     <meta name="author" content="${attr(personalInfo.name)}" />
     <meta name="keywords" content="Software Engineering Portfolio, Portfolio API, Software engineering" />
-    <script type="application/ld+json">${JSON.stringify(person).replaceAll("<", "\\u003c")}</script>
+    ${structuredData(person)}
+    ${structuredData(profilePage)}
+    ${structuredData(faq)}
     <link rel="canonical" href="${attr(siteUrl)}" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="${attr(siteUrl)}" />
@@ -330,6 +357,10 @@ export function renderDocument(): string {
         ${renderOpenSource()}
         ${renderAchievements()}
         ${renderLanguages()}
+        <section aria-labelledby="portfolio-faq">
+          ${sectionHeading("portfolio-faq", "Frequently asked questions")}
+          ${questions.map(({ question, answer, href, label }) => `<details><summary>${escapeHtml(question)}</summary><p>${escapeHtml(answer)} <a href="${attr(href)}">${escapeHtml(label)}</a></p></details>`).join("\n")}
+        </section>
       </main>
       <footer>
         <nav aria-label="Portfolio resources">
@@ -338,7 +369,8 @@ export function renderDocument(): string {
           <a href="/docs/mcp">Portfolio MCP server</a> · <a href="/about">About</a> ·
           <a href="/contact">Contact</a> · <a href="/privacy">Privacy</a>
         </nav>
-        <p>Last updated at build time.</p>
+        <p class="byline">By <a rel="author" href="/about">${escapeHtml(personalInfo.name)}</a>.
+          Last updated <time datetime="${homepageModified}">${homepageModified}</time>.</p>
       </footer>
     </div>
   </body>
